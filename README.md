@@ -1,2 +1,2 @@
 # Gramzone
-Ecomerce website built with Vanilla js and Node.js ,express,mysql
+A managment system for shipping companies
