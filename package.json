@@ -1,0 +1,33 @@
+{
+  "name": "DeliveryLTE",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-session-sequelize": "^7.1.2",
+    "csurf": "^1.11.0",
+    "dotenv": "^14.2.0",
+    "ejs": "^3.1.6",
+    "env-cmd": "^10.1.0",
+    "express": "^4.17.2",
+    "express-flash": "0.0.2",
+    "express-session": "^1.17.2",
+    "express-validator": "^6.14.0",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.13.0"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
+  },
+  "scripts": {
+    "start": "node ./src/app.js",
+    "dev": "env-cmd -f ./src/config/dev.env node ./src/app.js",
+    "test": "env-cmd -f ./src/config/test.env jest --watchAll"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "author": "Momen Daoud",
+  "license": "ISC"
+}

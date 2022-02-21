@@ -1,0 +1,112 @@
+<%- include('../includes/header')%>
+<%- include('../includes/navbar')%>
+<%- include('../includes/sidebar')%>
+<%- include('../includes/start_content_header')%>
+  <div class="col-sm-6">
+      <h1 class="m-0">Create ship</h1>
+  </div><!-- /.col -->
+  <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">Create ship Page</li>
+    </ol>
+  </div><!-- /.col -->
+
+<%- include('../includes/end_content_header')%>
+
+<%- include('../includes/start_content')%>
+
+
+<div class="col-12">
+	<div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Add ship</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <%if(errors){%>
+                <%errors.forEach(error => {%>
+                <p style="color:red;"><%= error.msg%></p>
+                <%})%>
+              <%}%>
+              <form action="/ships/create" method="POST">
+                <div class="card-body">                  
+                  <div class="form-group">
+                    <label>Type</label>
+                    <select name="type" class="form-control">
+                    	<option value="pick up">Pick up</option>
+                    	<option value="delivery">Delivery</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="shipDate">Ship date</label>
+                    <input type="date" class="form-control" id="shipDate" name="shipDate">
+                  </div>
+                  <div class="form-group">
+                    <label>Incapsulation type</label>
+                    <select name="incapsulationType" class="form-control">
+                      <option value="coil">Coil</option>
+                      <option value="cartoon">Cartoon</option>
+                      <option value="document">Document</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Payment type</label>
+                    <select name="paymentType" class="form-control">
+                      <option value="paid">Paid</option>
+                      <option value="pay back">Pay back</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Sender name</label>
+                    <select name="userId" class="form-control">
+                      <% users.forEach(user => { %>
+                        <option value="<%=user.id%>"><%=user.name%></option>
+                      <%})%>
+                      
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="receiverName">receiver Name</label>
+                    <input type="text" class="form-control" id="receiverName" name="receiverName">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="phone">Phone number</label>
+                    <input type="number" class="form-control" id="phone" name="phone">
+                  </div>
+                  <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" class="form-control" id="address" name="address">
+                  </div>
+                  <div class="form-group">
+                    <label for="orderNumber">order number</label>
+                    <input type="number" class="form-control" id="orderNumber" name="orderNumber">
+                  </div>
+                  <div class="form-group">
+                    <label for="shipingCosts">shipingCosts</label>
+                    <input type="number" class="form-control" id="shipingCosts" name="shipingCosts">
+                  </div>
+                  <div class="form-group">
+                    <label for="delivery Costs">delivery Costs</label>
+                    <input type="number" class="form-control" id="deliveryCosts" name="deliveryCosts">
+                  </div>
+                  <div class="form-group">
+                    <label>who pay</label>
+                    <select name="whoPay" class="form-control">
+                      <option value="sender">sender</option>
+                      <option value="receiver">receciver</option>
+                    </select>
+                  </div>
+                <!-- /.card-body -->
+                <input type="hidden" name="_csrf" value="<%= _csrf %>">
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+              </form>
+            </div>
+
+</div>
+<%- include('../includes/end_content')%>
+
+<%- include('../includes/footer')%>

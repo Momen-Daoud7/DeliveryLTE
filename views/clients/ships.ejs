@@ -1,0 +1,63 @@
+<%- include('../includes/header')%>
+<%- include('../includes/navbar')%>
+<%- include('../includes/sidebar')%>
+<%- include('../includes/start_content_header')%>
+<div class="col-sm-6">
+      <h1 class="m-0">ships</h1>
+  </div><!-- /.col -->
+  <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">ships Page</li>
+    </ol>
+  </div><!-- /.col -->
+<%- include('../includes/end_content_header')%>
+
+<%- include('../includes/start_content')%>
+
+
+<div class="col-12">
+	<div class="card">
+	<%if(ships) {%>
+		<div class="card-header">
+			<a href="/ships/add" class="btn btn-success font-weight-bold">Add ship</a>
+		</div>
+		<div class="card-body">
+			<table class="table table-bordered">
+			    <thead>
+			       <tr>
+			            <th>order number</th>
+			            <th>type</th>
+			            <th>receiver</th>			         
+			            <th>phone</th>
+			            <th>shipping Status</th>
+			            <th>Opreations</th>
+			        </tr>
+			   </thead>
+			   <tbody>
+			   	<% ships.forEach(ship => {%>
+			       <tr data-widget="expandable-table" aria-expanded="false">
+			            <td><%= ship.orderNumber%></td>
+			            <td><%= ship.type%></td>
+			            <td><%= ship.receiverName%></td>
+			            <td><%= ship.phone%></td>
+			            <td><%= ship.shipingStatus%></td>
+			            <td>
+			            	<a href="/ships/edit/<%=ship.id%>" class="btn btn-primary btn-sm d-inline">Edit</a>
+			            	<form action="/ships/delete/<%=ship.id%>" method='POST' class='d-inline'>
+								<input type="hidden" name="_csrf" value="<%= _csrf %>">
+			            		<button type="submit" class="btn btn-sm btn-danger">
+			            			Delete</button>
+			            	</form>
+			            </td>
+					</tr>
+			     <%})%>
+			   </tbody>
+			</table>
+		</div>
+	<%}%>
+	</div>
+</div>
+<%- include('../includes/end_content')%>
+
+<%- include('../includes/footer')%>

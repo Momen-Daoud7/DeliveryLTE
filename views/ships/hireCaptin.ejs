@@ -1,0 +1,53 @@
+<%- include('../includes/header')%>
+<%- include('../includes/navbar')%>
+<%- include('../includes/sidebar')%>
+<%- include('../includes/start_content_header')%>
+  <div class="col-sm-6">
+      <h1 class="m-0">Create ship</h1>
+  </div><!-- /.col -->
+  <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">Create ship Page</li>
+    </ol>
+  </div><!-- /.col -->
+
+<%- include('../includes/end_content_header')%>
+
+<%- include('../includes/start_content')%>
+
+
+<div class="col-12">
+	<div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Add ship</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <%if(errors){%>
+                <%errors.forEach(error => {%>
+                <p style="color:red;"><%= error.msg%></p>
+                <%})%>
+              <%}%>
+              <form action="/ships/hireCaptin/<%=ship.id%>" method="POST">
+                <div class="card-body">                  
+                  <div class="form-group">
+                    <label for="receiveDate">Hire captin</label>
+                    <select name="captinId" class="form-control">
+                      <%captins.forEach(captin => {%>
+                        <option value="<%=captin.id%>"><%=captin.name%></option>
+                      <%})%>
+                    </select>
+                  </div>
+                <!-- /.card-body -->
+                <input type="hidden" name="_csrf" value="<%= _csrf %>">
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary">Hire captin</button>
+                </div>
+              </form>
+            </div>
+
+</div>
+<%- include('../includes/end_content')%>
+
+<%- include('../includes/footer')%>

@@ -1,0 +1,63 @@
+<%- include('../includes/header')%>
+<%- include('../includes/navbar')%>
+<%- include('../includes/sidebar')%>
+<%- include('../includes/start_content_header')%>
+<div class="col-sm-6">
+      <h1 class="m-0">Edit user</h1>
+  </div><!-- /.col -->
+  <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">Edit user Page</li>
+    </ol>
+  </div><!-- /.col -->
+<%- include('../includes/end_content_header')%>
+
+<%- include('../includes/start_content')%>
+
+
+<div class="col-12">
+	<div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Quick Example</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form action="/users/update/<%=user.id%>" method="POST">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" value="<%= user.name%>">
+                  </div>
+                  <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" value="<%= user.email%>">
+                  </div>
+                  <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="address" class="form-control" id="address" name="address" placeholder="Enter your address" value="<%=user.address%>">
+                  </div>
+                  <div class="form-group">
+                    <label for="phone">Phone number</label>
+                    <input type="phone" class="form-control" id="phone" name="phone" placeholder="Enter your phone number" value="<%=user.phone%>">
+                  </div>
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password"placeholder="Password">
+                  </div>
+                  <div class="form-group">
+                    <label for="passwordConfirm">Confirm password</label>
+                    <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm"placeholder="Password">
+                  </div>
+                <!-- /.card-body -->
+                <input type="hidden" name="_csrf" value="<%= _csrf %>">
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary">Edit</button>
+                </div>
+              </form>
+            </div>
+
+</div>
+<%- include('../includes/end_content')%>
+
+<%- include('../includes/footer')%>
