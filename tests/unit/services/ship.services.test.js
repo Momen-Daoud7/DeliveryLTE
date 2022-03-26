@@ -1,42 +1,31 @@
 const shipServices = require('../../../src/services/ship.services')
-const User = require('../../../src/models/1-user');
-const Ship = require('../../../src/models/2-ship');
-const database = require('../../../src/config/database')
+const mongoose = require('mongoose');
+const User = require('../../../src/models/user');
+const Ship = require('../../../src/models/ship');
+const connect = require('../../../src/config/database')
 
 // Connect to database
 beforeAll(async () => {
-	await database.sync()
+	await connect();
 })
 
-
+let ship1,user;
 beforeEach(async () => {
-	await User.destroy({where:{}})
-	await Ship.destroy({where:{}})
+	await User.deleteMany({})
+	await Ship.deleteMany({})
 
-	await User.bulkCreate([
+	user = new User(
 		{
-			id:1,
 			name:"Momen Daoud Momen Daoud",
 			email:"momen@mail.com",
 			role:'manager',
 			address:"khartoum",
 			phone:'0126975878',
 			password:'1234567'
-		},
-		{
-			id:2,
-			name:"Ahmed Daoud Momen Daoud",
-			email:"ahmed@mail.com",
-			role:'captin',
-			address:"khartoum",
-			phone:'0136975878',
-			useStatus:false,
-			password:'1234567'
-		}
+		});
 
-	])
-
-	await Ship.bulkCreate([
+	await user.save();
+	ship1 = new Ship(
 		{
 			id:1,
 			type:'delivery',
@@ -44,7 +33,7 @@ beforeEach(async () => {
 			incapsulationType:'coil',
 			paymentType:'paid',
 			receiverName: "Mohmmed",
-			userId:1,
+			user:user._id,
 			phone:'0127893830',
 			address:'khartoum',
 			orderNumber:112343,
@@ -53,7 +42,9 @@ beforeEach(async () => {
 			whoPay:'sender',
 			receiveDate:'2020-02-17'
 		}
-	])
+	);
+
+	await ship1.save();
 })
 
 describe('Ship services tests', () => {
@@ -73,25 +64,24 @@ describe('Ship services tests', () => {
 	describe('test getShip functionallity', () => {
 
 		it("Should get a single Ship", async () => {
-			const ship = await shipServices.getShip(1);
+			const ship = await shipServices.getShip(ship1._id);
 			expect(ship.paymentType).toBe('paid')
 		})
 
 		it("Should return false when Ship is not exists", async () => {
 			const Ship = await shipServices.getShip(282);
-			expect(Ship).toBe(false)
+			expect(Ship).toBe(undefined)
 		})
 	})
 
 	it("should create new Ship",async () => {
 		const data = {
-			id:3,
 			type:'pick up',
 			shipDate:'2020-02-12',
 			incapsulationType:'coil',
 			paymentType:'paid',
 			receiverName: "Mohmmed",
-			userId:1,
+			user:user._id,
 			phone:'0127893830',
 			address:'khartoum',
 			orderNumber:112343,
@@ -101,7 +91,8 @@ describe('Ship services tests', () => {
 			receiveDate:'2020-02-17'
 		}
 		const ship = await shipServices.store(data)
-		console.log(ship)
+		console.log("This ship" + ship)
+		console.log(ship.user.name)
 		expect(ship.type).toBe(data.type)
 		expect(ship.userId).toBe(data.userId)
 	})
@@ -110,14 +101,14 @@ describe('Ship services tests', () => {
 
 		it("Should update a Ship details",async () => {
 			const data = {type: "pick up"}
-			const ship = await shipServices.update(1,data)
+			const ship = await shipServices.update(ship1._id,data)
 			expect(ship.type).toBe(data.type)
 		})
 
 		it("Should return false when updateing unexiting Ship",async () => {
 			const data = {type: "pick up"}
 			const ship = await shipServices.update(11,data)
-			expect(ship).toBe(false)
+			expect(ship).toBe(undefined)
 		})
 	})
 
@@ -125,13 +116,13 @@ describe('Ship services tests', () => {
 	describe("Test delete Ship functionallity",() => {
 
 		it("Should delete a Ship",async () => {
-			const ship = await shipServices.delete(1)
+			const ship = await shipServices.delete(ship1._id)
 			expect(ship).toBe(true)
 		})
 
 		it("Should return false when updateing unexiting Ship",async () => {
 			const ship = await shipServices.delete(100)
-			expect(ship).toBe(false)
+			expect(ship).toBe(undefined)
 		})
 	})
 
