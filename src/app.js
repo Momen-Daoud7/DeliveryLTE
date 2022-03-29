@@ -1,43 +1,41 @@
 const path = require('path');
 const express = require('express');
 const dotenv = require('dotenv');
-const session = require('express-session')
-const MongoStore = require('connect-mongo')     
-const mongoose = require('mongoose');
+const session = require('express-session');
+const mysqlStore = require('connect-session-sequelize')(session.Store);
 const csrf = require('csurf');
 
-const connect = require('./config/database');
-
-const app = express();
+const database = require('./config/database');
+const User = require('./models/1-user');
+const Ship = require('./models/2-ship');
 
 // load dotenv
 dotenv.config({ path: './config/config.env'});
-
-// connect to database
-connect();
-
-// Session managment
-app.use(session({
-  secret:'3d93jd093jd0jnvhsdaw022h920',
-  resave: false,
-  saveUninitialized: false,
-  store: MongoStore.create({
-    mongoUrl:process.env.MONGO_URL
-  })
-}))
 
 // Mout routes
 const auth = require('./routes/auth');
 const users = require('./routes/users');
 const ships = require('./routes/ships');
 
+const app = express();
 
 // Set static folder
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '../public')));
 
+// session mangament
+let mysession = new mysqlStore({db: database});
+mysession.sync();
 
+app.use(
+  session({
+    secret: 'my secret',
+    resave: false,
+    saveUninitialized: false,
+    store: mysession
+  })
+);
 
 app.use(csrf());
 
@@ -63,10 +61,17 @@ app.use((req,res,next) => {
 app.use(auth);
 app.use('/users',users);
 app.use('/ships',ships);
+// app.use('/',async (req,res,next) => {
+//   const ship = await Ship.findAll()
+//   res.render('index')
+// });
 
 const PORT = process.env.PORT || 5000;
 
 // Run the server
-app.listen(PORT,console.log(`Server running in ${PORT}`))
-	
+database.sync()
+	.then(result => {
+		app.listen(PORT,console.log(`Server running in ${PORT}`))
+	})
+	.catch(err => console.log(err));
 

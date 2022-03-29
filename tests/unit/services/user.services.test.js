@@ -1,37 +1,37 @@
 const userServices = require('../../../src/services/user.services')
-const mongoose = require('mongoose');
-const User = require('../../../src/models/user')
-const connectDB = require('../../../src/config/database')
+const User = require('../../../src/models/1-user');
+const database = require('../../../src/config/database')
 
 // Connect to database
 beforeAll(async () => {
-	await connectDB();
+	await database.sync()
 })
 
-let user1;
+
 beforeEach(async () => {
-	await User.deleteMany();
-	user1 = new User({
-		name:"Momen Daoud Momen Daoud",
-		email:"momen@mail.com",
-		role:'manager',
-		address:"khartoum",
-		phone:'0126975878',
-		password:'1234567'
-	})
+	await User.destroy({where:{}})
+	await User.bulkCreate([
+		{
+			id:1,
+			name:"Momen Daoud Momen Daoud",
+			email:"momen@mail.com",
+			role:'manager',
+			address:"khartoum",
+			phone:'0126975878',
+			password:'1234567'
+		},
+		{
+			id:2,
+			name:"Ahmed Daoud Momen Daoud",
+			email:"ahmed@mail.com",
+			role:'client',
+			address:"khartoum",
+			phone:'0136975878',
+			useStatus:false,
+			password:'1234567'
+		}
 
-	const user2 = new User({
-		name:"Ahmed Daoud Momen Daoud",
-		email:"ahmed@mail.com",
-		role:'client',
-		address:"khartoum",
-		phone:'0136975878',
-		useStatus:false,
-		password:'1234567'
-	})
-
-	await user1.save();
-	await user2.save()
+	])
 })
 
 describe('User services tests', () => {
@@ -51,18 +51,19 @@ describe('User services tests', () => {
 	describe('test getUser functionallity', () => {
 
 		it("Should get a single user", async () => {
-			const user = await userServices.getUser(user1._id);
+			const user = await userServices.getUser(1);
 			expect(user.name).toBe('Momen Daoud Momen Daoud')
 		})
 
 		it("Should return false when user is not exists", async () => {
-			const user = await userServices.getUser(5);
-			expect(user).toBe(undefined)
+			const user = await userServices.getUser(282);
+			expect(user).toBe(false)
 		})
 	})
 
 	it("should create new user",async () => {
 		const data = {
+			id:3,
 			name:"John Do",
 			email:"momen12@mail.com",
 			role:'manager',
@@ -73,22 +74,23 @@ describe('User services tests', () => {
 		const user = await userServices.store(data)
 		console.log(user)
 		expect(user.name).toBe(data.name)
-		expect(user.phone).toBe(126975878)
-		expect(user.useStatus).toBe(false)
+		expect(user.phone).toBe(data.phone)
+		expect(user.useStatus).toBe(true)
 	})
 
 	describe("Test update user functionallity",() => {
 
 		it("Should update a user details",async () => {
 			const data = {name: "John Do"}
-			const user = await userServices.update(user1._id,data)
+			const user = await userServices.update(1,data)
 			expect(user.name).toBe(data.name)
 		})
 
 		it("Should return false when updateing unexiting user",async () => {
 			const data = {name: "John Do"}
-			const user = await userServices.update(1,data)
-			expect(user).toBe(undefined)
+			const user = await userServices.update(11,data)
+			expect(user).toBe(false)
+			expect(user.name).toBe(undefined)
 		})
 	})
 
@@ -96,13 +98,13 @@ describe('User services tests', () => {
 	describe("Test delete user functionallity",() => {
 
 		it("Should delete a user",async () => {
-			const user = await userServices.delete(user1._id)
+			const user = await userServices.delete(1)
 			expect(user).toBe(true)
 		})
 
 		it("Should return false when updateing unexiting user",async () => {
 			const user = await userServices.delete(100)
-			expect(user).toBe(undefined)
+			expect(user).toBe(false)
 		})
 	})
 

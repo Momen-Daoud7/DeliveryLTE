@@ -1,6 +1,6 @@
 const shipServices = require('../services/ship.services');
 const userServices = require('../services/user.services');
-const Ship = require('../models/ship')
+const Ship = require('../models/2-ship')
 
 // Get all ships
 exports.getShips = async(req,res,next) => {
