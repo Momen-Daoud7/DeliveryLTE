@@ -6,8 +6,7 @@ const mysqlStore = require('connect-session-sequelize')(session.Store);
 const csrf = require('csurf');
 
 const database = require('./config/database');
-const User = require('./models/1-user');
-const Ship = require('./models/2-ship');
+
 
 // load dotenv
 dotenv.config({ path: './config/config.env'});

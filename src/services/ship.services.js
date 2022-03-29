@@ -1,4 +1,4 @@
-const Ship = require('../models/2-Ship');
+const Ship = require('../models/2-ship');
 
 module.exports = class ShipServices {
 	// get all Ships
