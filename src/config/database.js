@@ -1,8 +1,11 @@
-const Sequelize = require('sequelize');
+const mongoose = require('mongoose');
 
-const database = new Sequelize(process.env.DATABASE_NAME,process.env.DATABASE_USERNAME,process.env.DATABASE_PASSWORD,{
-	dialect: 'mysql',
-	host: process.env.DATABASE_HOST
-});
+const connectDB = async () => {
+	const conn = await mongoose.connect(process.env.MONGO_URL,{
+		useNewUrlParser: true,
+	    useUnifiedTopology: true
+	});
+	console.log(`MongoDB Connected: ${conn.connection.host}`)
+}
 
-module.exports = database; 
+module.exports = connectDB; 
